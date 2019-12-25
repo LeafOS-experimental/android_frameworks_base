@@ -28,4 +28,8 @@
 
     <!-- Whether key handler sends intent when changing slider position -->
     <java-symbol type="string" name="config_alertSliderIntent" />
+
+    <!-- App version -->
+    <java-symbol type="string" name="old_version_number" />
+    <java-symbol type="string" name="new_version_number" />
 </resources>
