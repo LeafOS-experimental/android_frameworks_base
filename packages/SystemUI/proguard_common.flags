@@ -52,3 +52,8 @@
   static *** v(...);
 }
 -maximumremovedandroidloglevel 2
+
+# Keep class referenced from volume dialog layout XML
+-keep class com.android.systemui.statusbar.phone.ExpandableIndicator {
+    *;
+}
