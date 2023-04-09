@@ -17,6 +17,7 @@
 package com.android.systemui.qs;
 
 import static com.android.systemui.util.Utils.useQsMediaPlayer;
+import static com.android.systemui.util.qs.QSStyleUtils.isA11Style;
 
 import android.annotation.NonNull;
 import android.annotation.Nullable;
@@ -25,6 +26,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.ArrayMap;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -90,7 +92,10 @@ public class QSPanel extends LinearLayout implements Tunable {
     private PageIndicator mFooterPageIndicator;
     private int mContentMarginStart;
     private int mContentMarginEnd;
-    private boolean mUsingHorizontalLayout;
+    private int mMaxColumnsPortrait;
+    private int mMaxColumnsLandscape;
+    private int mMaxColumnsMediaPlayer;
+    protected boolean mUsingHorizontalLayout;
 
     @Nullable
     private LinearLayout mHorizontalLinearLayout;
@@ -123,6 +128,16 @@ public class QSPanel extends LinearLayout implements Tunable {
                 R.dimen.quick_settings_bottom_margin_media);
         mMediaTopMargin = getResources().getDimensionPixelSize(
                 R.dimen.qs_tile_margin_vertical);
+        mMaxColumnsPortrait = getResources().getInteger(R.integer.qs_panel_num_columns);
+        mMaxColumnsLandscape = getResources().getInteger(R.integer.qs_panel_num_columns_landscape);
+        mMaxColumnsMediaPlayer = getResources().getInteger(R.integer.qs_panel_num_columns_media);
+        if (isA11Style()) {
+            mMaxColumnsPortrait = Settings.Secure.getInt(context.getContentResolver(),
+                    Settings.System.QS_NUM_COLUMNS, mMaxColumnsPortrait);
+            mMaxColumnsLandscape = Settings.Secure.getInt(context.getContentResolver(),
+                    Settings.System.QS_NUM_COLUMNS_LANDSCAPE, mMaxColumnsLandscape);
+        }
+
         mContext = context;
 
         setOrientation(VERTICAL);
@@ -794,6 +809,10 @@ public class QSPanel extends LinearLayout implements Tunable {
             return false;
         }
 
+        /** Gets the max number of columns to show
+         *
+         * @return The maximum number of visible columns.
+         */
         int getMaxColumns();
 
         /**

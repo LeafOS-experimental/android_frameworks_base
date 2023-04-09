@@ -39,27 +39,4 @@ public class QSLayoutUtils {
          Settings.System.QS_TILE_VERTICAL_LAYOUT,
          0, UserHandle.USER_CURRENT) == 1;
    }
-
-   public static boolean updateLayout(Context context) {
-       final IOverlayManager overlayManager = IOverlayManager.Stub.asInterface(ServiceManager.getService(
-          	Context.OVERLAY_SERVICE));
-       final int layout_qs = Settings.System.getIntForUser(context.getContentResolver(),
-          	Settings.System.QS_LAYOUT,
-          	42, UserHandle.USER_CURRENT);
-       final int layout_qqs = Settings.System.getIntForUser(context.getContentResolver(),
-          	Settings.System.QQS_LAYOUT,
-          	22, UserHandle.USER_CURRENT);
-       for (int i = 0; i < 2; ++i) {
-          boolean isQs = i == 0;
-          final int qs_row_count = (isQs ? layout_qs : layout_qqs) / 10;
-          String overlay_layout = isQs ? "qs" : "qqs";
-      	  String pkgName = String.format("com.android." + overlay_layout + ".portrait.layout_%sx%s", Integer.toString(qs_row_count), Integer.toString(layout_qs % 10));
-      	  try {
-            overlayManager.setEnabledExclusiveInCategory(pkgName, UserHandle.USER_CURRENT);
-      	  } catch (RemoteException re) {
-            return false;
-      	  }
-       }
-       return true;
-   }
 }

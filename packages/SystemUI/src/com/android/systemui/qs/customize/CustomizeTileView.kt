@@ -49,7 +49,7 @@ class CustomizeTileView(context: Context) : QSTileViewImpl(context, collapsed = 
         return if (showAppLabel && !TextUtils.isEmpty(text)) {
             VISIBLE
         } else {
-            if (isA11Style) INVISIBLE else GONE
+            if (isA11Style()) INVISIBLE else GONE
         }
     }
 

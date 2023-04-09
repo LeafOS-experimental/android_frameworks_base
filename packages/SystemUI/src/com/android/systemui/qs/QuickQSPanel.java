@@ -16,8 +16,11 @@
 
 package com.android.systemui.qs;
 
+import static com.android.systemui.util.qs.QSStyleUtils.isA11Style;
+
 import android.content.Context;
 import android.content.res.Configuration;
+import android.provider.Settings;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.accessibility.AccessibilityNodeInfo;
@@ -37,12 +40,30 @@ public class QuickQSPanel extends QSPanel {
     // A fallback value for max tiles number when setting via Tuner (parseNumTiles)
     public static final int TUNER_MAX_TILES_FALLBACK = 6;
 
+    // Tile Columns on normal conditions
+    public int mMaxColumnsPortrait = 5;
+    public int mMaxColumnsLandscape = 6;
+    // Tile Columns when media player is visible
+    public int mMaxColumnsMediaPlayer = 4;
+
     private boolean mDisabledByPolicy;
     private int mMaxTiles;
 
     public QuickQSPanel(Context context, AttributeSet attrs) {
         super(context, attrs);
         mMaxTiles = getResources().getInteger(R.integer.quick_qs_panel_max_tiles);
+        mMaxColumnsPortrait = getResources().getInteger(R.integer.quick_qs_panel_num_columns);
+        mMaxColumnsLandscape = getResources().getInteger(R.integer.quick_qs_panel_num_columns_landscape);
+        mMaxColumnsMediaPlayer = getResources().getInteger(R.integer.quick_qs_panel_num_columns_media);
+        if (isA11Style()) {
+            mMaxColumnsPortrait = Settings.System.getInt(context.getContentResolver(),
+                    Settings.System.QQS_NUM_COLUMNS, mMaxColumnsPortrait);
+            mMaxColumnsLandscape = Settings.System.getInt(context.getContentResolver(),
+                    Settings.System.QQS_NUM_COLUMNS_LANDSCAPE, mMaxColumnsLandscape);
+
+            mMaxTiles = Math.max(mMaxColumnsPortrait, mMaxColumnsLandscape);
+            mMaxTiles = Math.max(mMaxColumnsMediaPlayer, mMaxTiles);
+        }
     }
 
     @Override

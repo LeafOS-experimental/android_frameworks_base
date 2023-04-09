@@ -6374,6 +6374,30 @@ public final class Settings {
         public static final String QS_TILE_UI_STYLE = "qs_tile_ui_style";
 
         /**
+         * Quicksettings columns
+         * @hide
+         */
+        public static final String QS_NUM_COLUMNS = "qs_num_columns";
+
+        /**
+         * Quicksettings columns landscape
+         * @hide
+         */
+        public static final String QS_NUM_COLUMNS_LANDSCAPE = "qs_num_columns_landscape";
+
+        /**
+         * Quick QS columns
+         * @hide
+         */
+        public static final String QQS_NUM_COLUMNS = "qqs_num_columns";
+
+        /**
+         * Quick QS columns landscape
+         * @hide
+         */
+        public static final String QQS_NUM_COLUMNS_LANDSCAPE = "qqs_num_columns_landscape";
+
+        /**
          * Whether to show or hide alert slider notifications on supported devices
          * @hide
          */

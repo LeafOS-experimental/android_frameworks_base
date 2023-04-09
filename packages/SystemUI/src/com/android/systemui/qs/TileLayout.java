@@ -1,6 +1,7 @@
 package com.android.systemui.qs;
 
 import static com.android.systemui.util.Utils.useQsMediaPlayer;
+import static com.android.systemui.util.qs.QSStyleUtils.isA11Style;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -110,7 +111,6 @@ public class TileLayout extends ViewGroup implements QSTileLayout {
         return updateColumns();
     }
 
-    @VisibleForTesting
     @Override
     public int getMaxColumns() {
         return mMaxColumns;
@@ -190,7 +190,10 @@ public class TileLayout extends ViewGroup implements QSTileLayout {
 
     private boolean updateColumns() {
         int oldColumns = mColumns;
-        mColumns = Math.min(mResourceColumns, mMaxColumns);
+        if (isA11Style())
+            mColumns = mMaxColumns;
+        else
+            mColumns = Math.min(mResourceColumns, mMaxColumns);
         return oldColumns != mColumns;
     }
 

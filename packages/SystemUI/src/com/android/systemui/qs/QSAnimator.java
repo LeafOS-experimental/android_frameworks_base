@@ -317,8 +317,12 @@ public class QSAnimator implements QSHost.Callback, PagedTileLayout.PageListener
 
                 View view = mQsRootView;
 
+                int visibleTileCount = isA11Style() ?
+                        mQuickQSPanelController.getTileLayout().getMaxColumns() :
+                        mQuickQSPanelController.getTileLayout().getNumVisibleTiles();
+
                 // This case: less tiles to animate in small displays.
-                if (count < mQuickQSPanelController.getTileLayout().getNumVisibleTiles()) {
+                if (count < visibleTileCount) {
                     // Quick tiles.
                     QSTileView quickTileView = mQuickQSPanelController.getTileView(tile);
                     if (quickTileView == null) continue;
@@ -346,8 +350,8 @@ public class QSAnimator implements QSHost.Callback, PagedTileLayout.PageListener
 
                     // Icons
                     translateContent(
-                            isA11Style ? quickTileView.getIconWithBackground() : quickTileView.getIcon(),
-                            isA11Style ? tileView.getIconWithBackground() : tileView.getIcon(),
+                            isA11Style() ? quickTileView.getIconWithBackground() : quickTileView.getIcon(),
+                            isA11Style() ? tileView.getIconWithBackground() : tileView.getIcon(),
                             view,
                             xOffset,
                             yOffset,
@@ -389,15 +393,15 @@ public class QSAnimator implements QSHost.Callback, PagedTileLayout.PageListener
                     // Therefore, we use a quadratic interpolator animator to animate the alpha
                     // for tiles in QQS to match.
                     quadraticInterpolatorBuilder
-                            .addFloat(isA11Style ? quickTileView.getLabelContainer() :
+                            .addFloat(isA11Style() ? quickTileView.getLabelContainer() :
                                     quickTileView.getSecondaryLabel(), "alpha", 0, 1);
                     nonFirstPageAlphaBuilder
-                            .addFloat(isA11Style ? quickTileView.getLabelContainer() :
+                            .addFloat(isA11Style() ? quickTileView.getLabelContainer() :
                                     quickTileView.getSecondaryLabel(), "alpha", 0, 0);
 
                     mAnimatedQsViews.add(tileView);
                     mAllViews.add(quickTileView);
-                    mAllViews.add(isA11Style ? quickTileView.getLabelContainer() :
+                    mAllViews.add(isA11Style() ? quickTileView.getLabelContainer() :
                             quickTileView.getSecondaryLabel());
                 } else if (!isIconInAnimatedRow(count)) {
                     // Pretend there's a corresponding QQS tile (for the position) that we are
@@ -417,9 +421,9 @@ public class QSAnimator implements QSHost.Callback, PagedTileLayout.PageListener
                     mOtherFirstPageTilesHeightAnimator.addView(tileView);
                     tileView.setClipChildren(true);
                     tileView.setClipToPadding(true);
-                    firstPageBuilder.addFloat(isA11Style ? tileView.getLabelContainer() :
+                    firstPageBuilder.addFloat(isA11Style() ? tileView.getLabelContainer() :
                             tileView.getSecondaryLabel(), "alpha", 0, 1);
-                    mAllViews.add(isA11Style ? tileView.getLabelContainer() :
+                    mAllViews.add(isA11Style() ? tileView.getLabelContainer() :
                             tileView.getSecondaryLabel());
                 }
 

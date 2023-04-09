@@ -520,6 +520,44 @@ public class ThemeOverlayController implements CoreStartable, Dumpable {
                 },
                 UserHandle.USER_ALL);
 
+        ContentObserver qsSettingsObserver = new ContentObserver(mBgHandler) {
+            @Override
+            public void onChange(boolean selfChange, Collection<Uri> collection, int flags,
+                    int userId) {
+                if (DEBUG) Log.d(TAG, "Overlay changed for user: " + userId);
+                if (mUserTracker.getUserId() != userId) {
+                    return;
+                }
+                if (!mDeviceProvisionedController.isUserSetup(userId)) {
+                    Log.i(TAG, "Theme application deferred when setting changed.");
+                    mDeferredThemeEvaluation = true;
+                    return;
+                }
+                reevaluateSystemTheme(true /* forceReload */);
+            }
+        };
+
+        mSystemSettings.registerContentObserverForUserSync(
+                Settings.System.getUriFor(Settings.System.QS_NUM_COLUMNS),
+                false,
+                qsSettingsObserver,
+                UserHandle.USER_ALL);
+        mSystemSettings.registerContentObserverForUserSync(
+                Settings.System.getUriFor(Settings.System.QQS_NUM_COLUMNS),
+                false,
+                qsSettingsObserver,
+                UserHandle.USER_ALL);
+        mSystemSettings.registerContentObserverForUserSync(
+                Settings.System.getUriFor(Settings.System.QS_NUM_COLUMNS_LANDSCAPE),
+                false,
+                qsSettingsObserver,
+                UserHandle.USER_ALL);
+        mSystemSettings.registerContentObserverForUserSync(
+                Settings.System.getUriFor(Settings.System.QQS_NUM_COLUMNS_LANDSCAPE),
+                false,
+                qsSettingsObserver,
+                UserHandle.USER_ALL);
+
         boolean isA11Style = isA11StyleSetting(mContext);
         setA11Style(isA11Style);
         mThemeManager.enableOverlay(QS_STYLE_A11_OVERLAY, isA11Style);

@@ -129,7 +129,7 @@ constructor(
 
     private val colorActive = Utils.getColorAttrDefaultColor(context, R.attr.shadeActive)
     private val colorOffstate = Utils.getColorAttrDefaultColor(context, R.attr.shadeInactive) 
-    private val colorInactive = if (isA11Style) Utils.applyAlpha(INACTIVE_ALPHA, colorOffstate)
+    private val colorInactive = if (isA11Style()) Utils.applyAlpha(INACTIVE_ALPHA, colorOffstate)
             else colorOffstate
     private val colorUnavailable = Utils.getColorAttrDefaultColor(context, R.attr.shadeDisabled)
 
@@ -153,18 +153,18 @@ constructor(
     private var initialY = 0f
 
     private val colorLabelActive = Utils.getColorAttrDefaultColor(context,
-        if (isA11Style) R.attr.onShadeInactive
+        if (isA11Style()) R.attr.onShadeInactive
         else R.attr.onShadeActive)
     private val colorLabelInactive =
-        Utils.getColorAttrDefaultColor(context, if (isA11Style) R.attr.onShadeInactiveVariant
+        Utils.getColorAttrDefaultColor(context, if (isA11Style()) R.attr.onShadeInactiveVariant
         else R.attr.onShadeInactive)
     private val colorLabelUnavailable = Utils.getColorAttrDefaultColor(context, R.attr.outline)
 
     private val colorSecondaryLabelActive =
-        Utils.getColorAttrDefaultColor(context, if (isA11Style) R.attr.onShadeInactiveVariant
+        Utils.getColorAttrDefaultColor(context, if (isA11Style()) R.attr.onShadeInactiveVariant
         else R.attr.onShadeActiveVariant)
     private val colorSecondaryLabelInactive =
-        Utils.getColorAttrDefaultColor(context, if (isA11Style) R.attr.outline
+        Utils.getColorAttrDefaultColor(context, if (isA11Style()) R.attr.outline
         else R.attr.onShadeInactiveVariant)
     private val colorSecondaryLabelUnavailable =
         Utils.getColorAttrDefaultColor(context, R.attr.outline)
@@ -270,7 +270,7 @@ constructor(
         clipChildren = false
         clipToPadding = false
 
-        if (isA11Style) {
+        if (isA11Style()) {
             val iconContainerSize = context.resources.getDimensionPixelSize(R.dimen.qs_quick_tile_size)
             radiusActive = iconContainerSize / 2f
             radiusInactive = iconContainerSize / 4f
@@ -291,7 +291,7 @@ constructor(
         
         val iconSize = context.resources.getDimensionPixelSize(R.dimen.qs_icon_size)
 
-        if (isA11Style) {
+        if (isA11Style()) {
             changeCornerRadius(getCornerRadiusForState(QSTile.State.DEFAULT_STATE))
             iconContainer.addView(icon, LayoutParams(iconSize, iconSize))
             addView(iconContainer, 0)
@@ -328,11 +328,11 @@ constructor(
     }
 
     fun updateResources() {
-        val labelSize = if (isA11Style) 12f else 14f
+        val labelSize = if (isA11Style()) 12f else 14f
         label.setTextSize(TypedValue.COMPLEX_UNIT_SP, labelSize)
         secondaryLabel.setTextSize(TypedValue.COMPLEX_UNIT_SP, labelSize)
 
-        if (isA11Style) {
+        if (isA11Style()) {
             updateA11StyleResources()
         } else {
             updateDefaultResources()
@@ -413,11 +413,11 @@ constructor(
     private fun createAndAddLabels() {
         labelContainer =
             LayoutInflater.from(context)
-                .inflate(if (isA11Style || vertical) R.layout.qs_tile_label_vertical else R.layout.qs_tile_label, this, false)
+                .inflate(if (isA11Style() || vertical) R.layout.qs_tile_label_vertical else R.layout.qs_tile_label, this, false)
                 as IgnorableChildLinearLayout
         label = labelContainer.requireViewById(R.id.tile_label)
         secondaryLabel = labelContainer.requireViewById(R.id.app_label)
-        if (isA11Style) {
+        if (isA11Style()) {
             if (collapsed) {
                 labelContainer.ignoreLastView = true
                 // Ideally, it'd be great if the parent could set this up when measuring just this child
@@ -445,7 +445,7 @@ constructor(
     private fun createAndAddSideView() {
         sideView =
             LayoutInflater.from(context)
-                .inflate(if (isA11Style) R.layout.qs_tile_side_icon_a11 else R.layout.qs_tile_side_icon, this, false)
+                .inflate(if (isA11Style()) R.layout.qs_tile_side_icon_a11 else R.layout.qs_tile_side_icon, this, false)
                 as ViewGroup
         customDrawableView = sideView.requireViewById(R.id.customDrawable)
         chevronView = sideView.requireViewById(R.id.chevron)
@@ -454,7 +454,7 @@ constructor(
     }
 
     private fun createTileBackground(): Drawable {
-        if (isA11Style) {
+        if (isA11Style()) {
             qsTileBackground =
                 if (Flags.qsTileFocusState()) {
                     mContext.getDrawable(R.drawable.qs_tile_background_flagged_no_mask) as RippleDrawable
@@ -545,7 +545,7 @@ constructor(
     }
 
     override fun getIconWithBackground(): View {
-        return if (isA11Style) iconContainer else icon
+        return if (isA11Style()) iconContainer else icon
     }
 
     override fun init(tile: QSTile) {
@@ -648,7 +648,7 @@ constructor(
 
     override fun setClickable(clickable: Boolean) {
         super.setClickable(clickable)
-        if (isA11Style) {
+        if (isA11Style()) {
             if (!Flags.qsTileFocusState()) {
                 iconContainer.background =
                     if (clickable && showRippleEffect) {
@@ -700,7 +700,7 @@ constructor(
     }
 
     override fun getAnimatedView(): LaunchableView {
-        return if (isA11Style) getIconWithBackground() as LaunchableView else this
+        return if (isA11Style()) getIconWithBackground() as LaunchableView else this
     }
 
     override fun setVisibility(visibility: Int) {
@@ -869,14 +869,14 @@ constructor(
         }
         secondaryLabel.visibility =
             if (TextUtils.isEmpty(state.secondaryLabel)) {
-                if (isA11Style) INVISIBLE else GONE
+                if (isA11Style()) INVISIBLE else GONE
             } else {
                 VISIBLE
             }
 
         // Colors
         if (state.state != lastState || state.disabledByPolicy != lastDisabledByPolicy) {
-            if (isA11Style) {
+            if (isA11Style()) {
                 tileAnimator.cancel()
             } else {
                 singleAnimator.cancel()
@@ -888,7 +888,7 @@ constructor(
                 getBackgroundColorForState(state.state, state.disabledByPolicy)
             )
             if (allowAnimations) {
-                if (isA11Style) {
+                if (isA11Style()) {
                     shapeAnimator.setFloatValues(
                         getCornerRadiusForState(lastState), 
                         getCornerRadiusForState(state.state)
@@ -921,7 +921,7 @@ constructor(
                         getOverlayColorForState(state.state)
                     )
                 )
-                if (isA11Style) {
+                if (isA11Style()) {
                     tileAnimator.start()
                 } else {
                    singleAnimator.start()
@@ -934,7 +934,7 @@ constructor(
                     getChevronColorForState(state.state, state.disabledByPolicy),
                     getOverlayColorForState(state.state)
                 )
-                if (isA11Style) {
+                if (isA11Style()) {
                     changeCornerRadius(getCornerRadiusForState(state.state))
                 }
             }
@@ -1024,7 +1024,7 @@ constructor(
     }
 
     private fun getCornerRadiusForState(state: Int): Float {
-        if (isA11Style)
+        if (isA11Style())
             return radiusActive
 
         return when (state) {
@@ -1205,7 +1205,7 @@ constructor(
             right = initialLongPressProperties?.width?.toInt() ?: measuredWidth,
             bottom = initialLongPressProperties?.height?.toInt() ?: measuredHeight,
         )
-        if (isA11Style) {
+        if (isA11Style()) {
             changeCornerRadius(getCornerRadiusForState(lastState))
         } else {
             changeCornerRadius(resources.getDimensionPixelSize(R.dimen.qs_corner_radius).toFloat())
