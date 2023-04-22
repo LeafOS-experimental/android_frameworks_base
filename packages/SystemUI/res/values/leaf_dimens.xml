@@ -17,4 +17,7 @@
 <resources>
     <!-- Network traffic -->
     <dimen name="network_traffic_width">25sp</dimen>
+
+    <!-- QS A11 Style -->
+    <dimen name="custom_qs_panel_padding_top">0dp</dimen>
 </resources>
