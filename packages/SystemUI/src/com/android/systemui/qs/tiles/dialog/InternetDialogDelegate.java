@@ -94,6 +94,7 @@ public class InternetDialogDelegate implements
 
     static final int MAX_NETWORK_COUNT = 4;
 
+    private final Context mContext;
     private final Handler mHandler;
     private final Executor mBackgroundExecutor;
     private final DialogTransitionAnimator mDialogTransitionAnimator;
@@ -193,6 +194,7 @@ public class InternetDialogDelegate implements
             @Background Executor executor,
             KeyguardStateController keyguardStateController,
             SystemUIDialog.Factory systemUIDialogFactory) {
+        mContext = context;
         mAboveStatusBar = aboveStatusBar;
         mSystemUIDialogFactory = systemUIDialogFactory;
         if (DEBUG) {
