@@ -14,6 +14,8 @@
 
 package com.android.systemui.qs;
 
+import static com.android.systemui.util.qs.QSStyleUtils.isA11Style;
+
 import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
 import android.annotation.NonNull;
@@ -137,7 +139,6 @@ public class QSAnimator implements QSHost.Callback, PagedTileLayout.PageListener
     private final DelayableExecutor mExecutor;
     private boolean mShowCollapsedOnKeyguard;
     private int mQQSTop;
-    private boolean isA11Style;
 
     private int[] mTmpLoc1 = new int[2];
     private int[] mTmpLoc2 = new int[2];
@@ -275,7 +276,6 @@ public class QSAnimator implements QSHost.Callback, PagedTileLayout.PageListener
     }
 
     private void updateAnimators() {
-        isA11Style = com.android.internal.util.systemui.qs.QSLayoutUtils.getQsUiStyle(mHost.getContext()) != 0;
         mNeedsAnimatorUpdate = false;
         TouchAnimator.Builder firstPageBuilder = new Builder();
         TouchAnimator.Builder translationYBuilder = new Builder();

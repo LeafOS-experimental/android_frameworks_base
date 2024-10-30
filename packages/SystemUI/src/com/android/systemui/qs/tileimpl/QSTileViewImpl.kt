@@ -16,6 +16,8 @@
 
 package com.android.systemui.qs.tileimpl
 
+import com.android.systemui.util.qs.QSStyleUtils.isA11Style
+
 import android.animation.AnimatorSet
 import android.animation.ArgbEvaluator
 import android.animation.PropertyValuesHolder
@@ -124,11 +126,6 @@ constructor(
             field = value
             updateHeight()
         }
-
-    private val isA11Style: Boolean = Settings.System.getIntForUser(
-            context.contentResolver,
-            Settings.System.QS_TILE_UI_STYLE, 0, UserHandle.USER_CURRENT
-        ) != 0
 
     private val colorActive = Utils.getColorAttrDefaultColor(context, R.attr.shadeActive)
     private val colorOffstate = Utils.getColorAttrDefaultColor(context, R.attr.shadeInactive) 
@@ -1027,11 +1024,8 @@ constructor(
     }
 
     private fun getCornerRadiusForState(state: Int): Float {
-        if (QSLayoutUtils.getQsUiStyle(context) == 1)
+        if (isA11Style)
             return radiusActive
-
-        if (QSLayoutUtils.getQsUiStyle(context) == 2)
-            return radiusInactive
 
         return when (state) {
             Tile.STATE_ACTIVE -> radiusActive

@@ -16,6 +16,8 @@
 
 package com.android.systemui.qs.customize
 
+import com.android.systemui.util.qs.QSStyleUtils.isA11Style
+
 import android.content.Context
 import android.text.TextUtils
 import com.android.systemui.plugins.qs.QSTile
@@ -47,7 +49,7 @@ class CustomizeTileView(context: Context) : QSTileViewImpl(context, collapsed = 
         return if (showAppLabel && !TextUtils.isEmpty(text)) {
             VISIBLE
         } else {
-            if (com.android.internal.util.systemui.qs.QSLayoutUtils.getQsUiStyle(context) != 0) INVISIBLE else GONE
+            if (isA11Style) INVISIBLE else GONE
         }
     }
 
